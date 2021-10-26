@@ -1,15 +1,21 @@
 from silex_client.core.context import Context
-from silex_client.utils.log import logger
-import traceback
+from silex_client.resolve.config import Config
+from silex_client.action.action_query import ActionQuery
 
-actions = [item["name"] for item in Context.get().config.actions]
+actions = [item["name"] for item in Config().actions]
+
 
 def command(action_name):
-    Context.get().get_action(action_name).execute()
+    ActionQuery(action_name).execute()
 
-def creat_menus():
+
+def create_menus():
     for action in actions:
-        #nuke.error(action)
-        nuke.menu('Nuke').addCommand('SIlex/{}'.format(str(action)), lambda: command(action))
+        # nuke.error(action)
+        nuke.menu("Nuke").addCommand(
+            "SIlex/{}".format(str(action)), lambda: command(action)
+        )
 
-creat_menus()
+
+Context.get().start_services()
+create_menus()
