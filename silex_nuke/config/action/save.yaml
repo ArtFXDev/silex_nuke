@@ -8,8 +8,6 @@ save:
       commands:
         build_work_path:
           path: "silex_client.commands.build_work_path.BuildWorkPath"
-          parameters:
-            increment: True
         save_scene:
           path: "silex_nuke.commands.save.Save"
           parameters:
