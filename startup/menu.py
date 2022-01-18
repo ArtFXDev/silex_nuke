@@ -1,21 +1,28 @@
+import nuke
+from silex_client.action.action_query import ActionQuery
 from silex_client.core.context import Context
 from silex_client.resolve.config import Config
-from silex_client.action.action_query import ActionQuery
-
-actions = [item["name"] for item in Config().actions]
-
-
-def command(action_name):
-    ActionQuery(action_name).execute()
 
 
 def create_menus():
-    for action in actions:
-        # nuke.error(action)
-        nuke.menu("Nuke").addCommand(
-            "SIlex/{}".format(str(action)), lambda: command(action)
+    # Get actions names from the config
+    actions = [item["name"] for item in Config().actions]
+
+    # Create a menu
+    menubar = nuke.menu("Nodes")
+    silex_menu = menubar.addMenu("Silex", icon="silex_logo.png")
+
+    for action_name in actions:
+        execute_action = lambda action=action_name: ActionQuery(action).execute()
+
+        # Create an entry in the Silex menu
+        silex_menu.addCommand(
+            action_name,
+            execute_action,
+            icon=f"{action_name}.svg",
         )
 
 
+# Start the WS connection
 Context.get().start_services()
 create_menus()
