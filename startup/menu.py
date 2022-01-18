@@ -26,3 +26,7 @@ def create_menus():
 # Start the WS connection
 Context.get().start_services()
 create_menus()
+
+# Override Ctrl+S and script save
+save_menu = nuke.menu("Nuke").findItem("File").findItem("Save Comp")
+save_menu.setScript("ActionQuery('save').execute()")
