@@ -13,13 +13,14 @@ def create_menus():
     silex_menu = menubar.addMenu("Silex", icon="silex_logo.png")
 
     for action_name in actions:
+        resolved_action = ActionQuery(action_name)
         execute_action = lambda action=action_name: ActionQuery(action).execute()
 
         # Create an entry in the Silex menu
         silex_menu.addCommand(
-            action_name,
+            resolved_action.buffer.label,
             execute_action,
-            icon=f"{action_name}.svg",
+            icon=resolved_action.buffer.thumbnail,
         )
 
 
