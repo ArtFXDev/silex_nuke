@@ -1,0 +1,10 @@
+increment_save: !inherit
+  parent: ".save"
+  thumbnail: "save_increment.svg"
+
+  steps:
+    save:
+      commands:
+        build_work_path:
+          parameters:
+            increment: true
