@@ -2,7 +2,6 @@ from __future__ import annotations
 import typing
 import logging
 from typing import Any, Dict
-from contextlib import suppress
 
 import pathlib
 from silex_client.action.command_base import CommandBase
