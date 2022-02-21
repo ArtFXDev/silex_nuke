@@ -11,13 +11,11 @@ from silex_client.action.parameter_buffer import ParameterBuffer
 from silex_client.utils.files import (
     find_sequence_from_path,
     is_valid_pipeline_path,
-    is_valid_path,
     sequence_exists,
 )
 from silex_client.utils.parameter_types import ListParameterMeta, TextParameterMeta
 
 from silex_nuke.utils.thread import execute_in_main_thread
-from silex_nuke.utils.constants import MATCH_FILE_SEQUENCE
 
 # Forward references
 if typing.TYPE_CHECKING:
@@ -104,25 +102,11 @@ class GetReferences(CommandBase):
                     and knob.name() not in knob_blacklist
                     and knob.getValue()
                 ):
-                    referenced_files.append((knob, pathlib.Path(knob.getValue())))
+                    value = pathlib.Path(knob.getEvaluatedValue())
+                    referenced_files.append((knob, value))
 
         # Make sure to not have duplicates in the references
         return list(set(referenced_files))
-
-    def _get_reference_sequence(
-        self, file_path: pathlib.Path, logger
-    ) -> fileseq.FileSequence:
-        """
-        Convert the reference's file path into a sequence
-        The reference is not a sequence, the returned value will be a sequence of one item
-        """
-        # We need to get the real path first, expand the syntaxes like %d
-        for regex in MATCH_FILE_SEQUENCE:
-            match = regex.match(str(file_path))
-            if match is None:
-                continue
-            file_path = pathlib.Path(str(file_path).replace(match.group(1), "0"))
-        return find_sequence_from_path(file_path)
 
     @CommandBase.conform_command()
     async def __call__(
@@ -141,7 +125,8 @@ class GetReferences(CommandBase):
         skip_all = False
         for attribute, file_path in referenced_files:
             # Get the sequence that correspond to the file path
-            file_paths = self._get_reference_sequence(file_path, logger)
+            file_paths = find_sequence_from_path(file_path)
+            logger.warning(file_path)
 
             # Skip the custom extensions provided
             if file_paths.extension() in excluded_extensions:
@@ -164,7 +149,7 @@ class GetReferences(CommandBase):
                 )
                 if skip or file_path is None or skip_all:
                     break
-                file_paths = self._get_reference_sequence(file_path, logger)
+                file_paths = find_sequence_from_path(file_path)
 
             # The user can decide to skip the references that are not reachable
             if skip or file_path is None:
