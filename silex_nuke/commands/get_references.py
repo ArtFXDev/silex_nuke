@@ -98,6 +98,8 @@ class GetReferences(CommandBase):
             for knob in node.allKnobs():
                 if (
                     knob.Class() == "File_Knob"
+                    and "disable" in node.knobs()
+                    and not node["disable"].getValue()
                     and node.Class() not in node_blacklist
                     and knob.name() not in knob_blacklist
                     and knob.getValue()
