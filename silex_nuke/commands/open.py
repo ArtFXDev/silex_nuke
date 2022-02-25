@@ -1,9 +1,10 @@
 from __future__ import annotations
-import typing
+
 import logging
+import pathlib
+import typing
 from typing import Any, Dict
 
-import pathlib
 from silex_client.action.command_base import CommandBase
 from silex_nuke.utils.thread import execute_in_main_thread
 

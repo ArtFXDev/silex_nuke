@@ -8,8 +8,8 @@ import fileseq
 from silex_client.action.command_base import CommandBase
 from silex_client.utils.files import format_sequence_string
 from silex_client.utils.parameter_types import AnyParameter, ListParameterMeta
-from silex_nuke.utils.thread import execute_in_main_thread
 from silex_nuke.utils.constants import MATCH_FILE_SEQUENCE
+from silex_nuke.utils.thread import execute_in_main_thread
 
 # Forward references
 if typing.TYPE_CHECKING:
