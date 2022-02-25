@@ -14,7 +14,6 @@ from silex_client.utils.files import (
     sequence_exists,
 )
 from silex_client.utils.parameter_types import ListParameterMeta, TextParameterMeta
-
 from silex_nuke.utils.thread import execute_in_main_thread
 
 # Forward references
@@ -91,7 +90,7 @@ class GetReferences(CommandBase):
         """
         referenced_files: List[Tuple[str, pathlib.Path]] = []
 
-        node_blacklist = ["Write"]
+        node_blacklist = ["Write", "CopyCat"]
         knob_blacklist = ["icon"]
 
         for node in nuke.allNodes(recurseGroups=True):
