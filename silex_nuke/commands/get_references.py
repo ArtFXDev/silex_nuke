@@ -127,7 +127,6 @@ class GetReferences(CommandBase):
         for attribute, file_path in referenced_files:
             # Get the sequence that correspond to the file path
             file_paths = find_sequence_from_path(file_path)
-            logger.warning(file_path)
 
             # Skip the custom extensions provided
             if file_paths.extension() in excluded_extensions:
